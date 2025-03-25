@@ -2,24 +2,34 @@ import { useState } from "react";
 import thumbs from "./assets/thumbs/dict"
 
 function PartyPanel() {
-    const [selectMode, setSelectMode] = useState<boolean>(false);
-    const [party, setParty] = useState<Array<string | undefined>>([undefined, undefined, undefined, undefined]);
-    
-    if (party[0] == undefined) setParty(["앰버", undefined, undefined, undefined]);
+    const [selectMode, setSelectMode] = useState<number>(0);
+    const [party, setParty] = useState<string[]>(['none', 'none', 'none', 'none']);
 
-    function open() {
-        setSelectMode(true);
+    function open(num: number) {
+        setSelectMode(num);
+    }
+
+    function selectCharacter(target: string) {
+        const old = party.indexOf(target);
+        const newParty = party.slice();
+        if (target !== 'none' && old >= 0)
+            newParty[old] = newParty[selectMode - 1];
+        newParty[selectMode - 1] = target;
+        setParty(newParty);
+        setSelectMode(0);
     }
     
     return (
-        <div>
-            <img src={ party[0] && thumbs[party[0]] } className="inline-block m-2 w-30 h-30 border rounded-2xl" onClick={ () => open() }/>
-            <img src={ party[1] && thumbs[party[1]] } className="inline-block m-2 w-30 h-30 border rounded-2xl" onClick={ () => open() } />
-            <img src={ party[2] && thumbs[party[2]] } className="inline-block m-2 w-30 h-30 border rounded-2xl" onClick={ () => open() } />
-            <img src={ party[3] && thumbs[party[3]] } className="inline-block m-2 w-30 h-30 border rounded-2xl" onClick={ () => open() } />
-            <div className={`${selectMode ? '' : 'hidden'} grid grid-cols-4 gap-3`}>
-                { Object.entries(thumbs).map(arg => ( <img key={arg[1]} src={arg[1]} className="w-30 h-30"/> )) }
+        <div className="select-none">
+            <div>파티 구성</div>
+            <img src={ thumbs[party[0]] } className={`inline-block m-2 w-30 h-30 border-4 rounded-2xl ${ selectMode == 1 ? 'border-amber-200' : '' }`} onClick={ () => open(1) }/>
+            <img src={ thumbs[party[1]] } className={`inline-block m-2 w-30 h-30 border-4 rounded-2xl ${ selectMode == 2 ? 'border-amber-200' : '' }`} onClick={ () => open(2) } />
+            <img src={ thumbs[party[2]] } className={`inline-block m-2 w-30 h-30 border-4 rounded-2xl ${ selectMode == 3 ? 'border-amber-200' : '' }`} onClick={ () => open(3) } />
+            <img src={ thumbs[party[3]] } className={`inline-block m-2 w-30 h-30 border-4 rounded-2xl ${ selectMode == 4 ? 'border-amber-200' : '' }`} onClick={ () => open(4) } />
+            <div className={`${selectMode ? '' : 'hidden'} m-2 grid grid-cols-4 gap-4 absolute`}>
+                { Object.entries(thumbs).map(([name, path]) => ( <img key={path} src={path} className="w-30 h-30 border-4 rounded-2xl" onClick={ () => selectCharacter(name) } /> )) }
             </div>
+            <div>테스트 텍스트</div>
         </div>
     );
 }
