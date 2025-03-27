@@ -15,9 +15,13 @@ function App() {
     setCharacters([...characters, chara]);
   }
 
+  function removeCharacter(idx: number) {
+    setCharacters([...characters.slice(0, idx), ...characters.slice(idx + 1)]);
+  }
+
   return (
     <div className="select-none w-screen h-screen grid" style={{ gridTemplateColumns: "280px 2fr 1fr" }}>
-      <PartyPanel characters={characters} addCharacters={addCharacter} />
+      <PartyPanel characters={characters} addCharacter={addCharacter} removeCharacter={removeCharacter} />
       <ParameterPanel />
       <DamagePanel />
     </div>
