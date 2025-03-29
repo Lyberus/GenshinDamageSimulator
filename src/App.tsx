@@ -6,10 +6,11 @@ import { useState } from "react";
 export type Character = {
   name: string;
   elem: string;
+  thumb: string;
 };
 
 function App() {
-  const [characters, setCharacters] = useState<Character[]>([{ name: "마비카", elem: "불" }, { name: "푸리나", elem: "물" }, { name: "나히다", elem: "풀" }, { name: "라이덴 쇼군", elem: "번개" }, { name: "시틀라리", elem: "얼음" }, { name: "벤티", elem: "바람" }, { name: "종려", elem: "바위" }]);
+  const [characters, setCharacters] = useState<Character[]>([]);
 
   function addCharacter(chara: Character) {
     setCharacters([...characters, chara]);
