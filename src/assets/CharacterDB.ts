@@ -6,12 +6,12 @@ for (const path in images) {
     imageMap[path.substring(9, path.length - 5)] = src;
 }
 
-export type Character = {
+export type CharacterInfo = {
     elem: string;
     thumb?: string;
   };
 
-const DB: Record<string, Character> = {
+const DB: Record<string, CharacterInfo> = {
     "다이루크": {
         elem: "불",
     },
