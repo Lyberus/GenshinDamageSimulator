@@ -27,7 +27,7 @@ function PartyPanel({ characters, addCharacter, removeCharacter, selectCharacter
                 <button className="bg-amber-400 p-2 rounded-2xl hover:bg-amber-500 cursor-pointer" onClick={() => setPanelOpen(!panelOpen) }>캐릭터 추가</button>
             </div>
             {panelOpen && (
-                <div className="fixed left-70 top-0 h-full w-70 bg-gray-100 p-4">
+                <div className="fixed left-70 top-0 h-full w-70 rounded-r-2xl bg-gray-100 p-4">
                     <div className="flex justify-between">
                         <h2 className="text-lg font-semibold text-blue-400">캐릭터 선택</h2>
                         <button className="pb-1 text-gray-500 hover:text-gray-700 cursor-pointer" onClick={() => setPanelOpen(false)}>X</button>

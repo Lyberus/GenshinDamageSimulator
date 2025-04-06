@@ -5,6 +5,7 @@ import { useImmer } from "use-immer";
 import { useState } from "react";
 import { CharacterInfo } from "./assets/CharacterDB";
 import CharDB from "./assets/CharacterDB";
+import CycleManager from "./CycleManager";
 
 export type Stat = {
   kind: string;
@@ -36,11 +37,12 @@ export type Character = {
   info: CharacterInfo;
   visible: boolean;
   presets: Spec[];
+  selectedPreset: number;
 };
 
 const initialCharacters: Character[] = [];
 for (const [name, info] of Object.entries(CharDB))
-  initialCharacters.push({ name: name, info: info, visible: false, presets: [] });
+  initialCharacters.push({ name: name, info: info, visible: false, presets: [], selectedPreset: 0 });
 
 function App() {
   const [characters, updateCharacters] = useImmer<Character[]>(initialCharacters);
@@ -66,6 +68,7 @@ function App() {
       <PartyPanel characters={characters} addCharacter={addCharacter} removeCharacter={removeCharacter} selectCharacter={selectCharacter} />
       <ParameterPanel characters={characters} selected={selected} onChange={updateCharacters} />
       <DamagePanel />
+      <CycleManager />
     </div>
   );
 }
