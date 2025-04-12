@@ -1,0 +1,163 @@
+input[type="range"] {
+    -webkit-appearance: none;
+    appearance: none;
+    width: 100%;
+    height: 6px;
+    border-radius: 5px;
+    background: transparent;
+    outline: none;
+}
+
+/* Webkit 트랙과 Thumb */
+input[type="range"]::-webkit-slider-runnable-track {
+    height: 6px;
+    border-radius: 5px;
+}
+
+input[type="range"]::-webkit-slider-thumb {
+    -webkit-appearance: none;
+    appearance: none;
+    width: 16px;
+    height: 16px;
+    border-radius: 50%;
+    border: 2px solid white;
+    cursor: pointer;
+    box-shadow: 0 0 2px rgba(0, 0, 0, 0.4);
+    margin-top: -5px;
+}
+
+/* Firefox용 트랙과 Thumb */
+input[type="range"]::-moz-range-track {
+    height: 6px;
+    border-radius: 5px;
+}
+
+input[type="range"]::-moz-range-thumb {
+    width: 16px;
+    height: 16px;
+    border-radius: 50%;
+    border: 2px solid white;
+    cursor: pointer;
+    box-shadow: 0 0 2px rgba(0, 0, 0, 0.4);
+}
+
+/* ===== 원소별 스타일 ===== */
+
+/* 🔥 불 (Red) */
+.range-red::-webkit-slider-runnable-track {
+    background-color: #fca5a5;
+}
+
+.range-red::-webkit-slider-thumb {
+    background-color: #ef4444 !important;
+}
+
+.range-red::-moz-range-track {
+    background-color: #fca5a5;
+}
+
+.range-red::-moz-range-thumb {
+    background-color: #ef4444 !important;
+}
+
+/* 💧 물 (Blue) */
+.range-blue::-webkit-slider-runnable-track {
+    background-color: #93c5fd;
+}
+
+.range-blue::-webkit-slider-thumb {
+    background-color: #3b82f6 !important;
+}
+
+.range-blue::-moz-range-track {
+    background-color: #93c5fd;
+}
+
+.range-blue::-moz-range-thumb {
+    background-color: #3b82f6 !important;
+}
+
+/* 🍃 바람 (Teal) */
+.range-teal::-webkit-slider-runnable-track {
+    background-color: #5eead4;
+}
+
+.range-teal::-webkit-slider-thumb {
+    background-color: #14b8a6 !important;
+}
+
+.range-teal::-moz-range-track {
+    background-color: #5eead4;
+}
+
+.range-teal::-moz-range-thumb {
+    background-color: #14b8a6 !important;
+}
+
+/* ⚡ 번개 (Purple) */
+.range-purple::-webkit-slider-runnable-track {
+    background-color: #d8b4fe;
+}
+
+.range-purple::-webkit-slider-thumb {
+    background-color: #a855f7 !important;
+}
+
+.range-purple::-moz-range-track {
+    background-color: #d8b4fe;
+}
+
+.range-purple::-moz-range-thumb {
+    background-color: #a855f7 !important;
+}
+
+/* ❄️ 얼음 (Sky) */
+.range-sky::-webkit-slider-runnable-track {
+    background-color: #7dd3fc;
+}
+
+.range-sky::-webkit-slider-thumb {
+    background-color: #38bdf8 !important;
+}
+
+.range-sky::-moz-range-track {
+    background-color: #7dd3fc;
+}
+
+.range-sky::-moz-range-thumb {
+    background-color: #38bdf8 !important;
+}
+
+/* 🪨 바위 (Yellow) */
+.range-yellow::-webkit-slider-runnable-track {
+    background-color: #fde68a;
+}
+
+.range-yellow::-webkit-slider-thumb {
+    background-color: #facc15 !important;
+}
+
+.range-yellow::-moz-range-track {
+    background-color: #fde68a;
+}
+
+.range-yellow::-moz-range-thumb {
+    background-color: #facc15 !important;
+}
+
+/* 🌱 풀 (Green) */
+.range-green::-webkit-slider-runnable-track {
+    background-color: #86efac;
+}
+
+.range-green::-webkit-slider-thumb {
+    background-color: #22c55e !important;
+}
+
+.range-green::-moz-range-track {
+    background-color: #86efac;
+}
+
+.range-green::-moz-range-thumb {
+    background-color: #22c55e !important;
+}

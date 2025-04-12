@@ -21,6 +21,7 @@ export type Spec = {
   name: string;
   level: number;
   maxLevel: number;
+  maxWeaponLevel: number;
   weaponLevel: number;
   attackLevel: number;
   skillLevel: number;
@@ -64,7 +65,7 @@ function App() {
   }
 
   return (
-    <div className="select-none w-screen h-screen grid" style={{ gridTemplateColumns: "280px 2fr 1fr" }}>
+    <div className="select-none w-screen h-screen grid" style={{ gridTemplateColumns: "280px 300px 1fr" }}>
       <PartyPanel characters={characters} addCharacter={addCharacter} removeCharacter={removeCharacter} selectCharacter={selectCharacter} />
       <ParameterPanel characters={characters} selected={selected} onChange={updateCharacters} />
       <DamagePanel />
