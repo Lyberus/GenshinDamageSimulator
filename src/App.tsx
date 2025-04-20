@@ -6,6 +6,7 @@ import { useState } from "react";
 import { CharacterInfo } from "./assets/CharacterDB";
 import CharDB from "./assets/CharacterDB";
 import CycleManager from "./CycleManager";
+import { Draft } from "immer";
 
 export type Stat = {
   kind: string;
@@ -26,11 +27,7 @@ export type Spec = {
   attackLevel: number;
   skillLevel: number;
   burstLevel: number;
-  flower: Artifact;
-  plume: Artifact;
-  sands: Artifact;
-  goblet: Artifact;
-  circlet: Artifact;
+  artifact: [Artifact, Artifact, Artifact, Artifact, Artifact];
 };
 
 export type Character = {
@@ -64,10 +61,20 @@ function App() {
     setSelected(name);
   }
 
+  function updatePreset(recipe: (draft: Draft<Spec>) => void) {
+    const idx = characters.findIndex(val => val.name === selected);
+    updateCharacters(draft => recipe(draft[idx].presets[draft[idx].selectedPreset]));
+  }
+
+  function updateCharacter(recipe: (draft: Draft<Character>) => void) {
+    const idx = characters.findIndex(val => val.name === selected);
+    updateCharacters(draft => recipe(draft[idx]));
+  }
+
   return (
-    <div className="select-none w-screen h-screen grid" style={{ gridTemplateColumns: "280px 300px 1fr" }}>
+    <div className="select-none w-screen h-screen flex">
       <PartyPanel characters={characters} addCharacter={addCharacter} removeCharacter={removeCharacter} selectCharacter={selectCharacter} />
-      <ParameterPanel characters={characters} selected={selected} onChange={updateCharacters} />
+      <ParameterPanel characters={characters} selected={selected} updatePreset={updatePreset} updateCharacter={updateCharacter} />
       <DamagePanel />
       <CycleManager />
     </div>
