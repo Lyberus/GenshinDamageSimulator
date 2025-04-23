@@ -11,24 +11,27 @@ import { Draft } from "immer"
 import { useEffect, useRef, useState } from "react"
 
 const MainOptions: string[][] = [
-    ['체력+'], // 꽃
+    ['HP+'], // 꽃
     ['공격력+'], // 깃털
-    ['공격력%', '방어력%', '체력%', '원소 마스터리+', '원소 충전 효율%'], // 시계
-    ['공격력%', '방어력%', '체력%', '원소 마스터리+', '물리 피해%', '불 원소 피해%', '물 원소 피해%', '얼음 원소 피해%', '바람 원소 피해%', '바위 원소 피해%', '번개 원소 피해%', '풀 원소 피해%'], // 성배
-    ['공격력%', '방어력%', '체력%', '원소 마스터리+', '치명타 확률%', '치명타 피해%', '치유 보너스%'], // 왕관관
+    ['공격력%', '방어력%', 'HP%', '원소 마스터리+', '원소 충전 효율%'], // 시계
+    ['공격력%', '방어력%', 'HP%', '원소 마스터리+', '물리 피해%', '불 원소 피해%', '물 원소 피해%', '얼음 원소 피해%', '바람 원소 피해%', '바위 원소 피해%', '번개 원소 피해%', '풀 원소 피해%'], // 성배
+    ['공격력%', '방어력%', 'HP%', '원소 마스터리+', '치명타 확률%', '치명타 피해%', '치유 보너스%'], // 왕관관
 ];
 
 const SubOptions: string[] = [
-    '체력+'
+    'Empty', 'HP+', 'HP%', '공격력+', '공격력%', '방어력+', '방어력%', '원소 마스터리+', '원소 충전 효율%', '치명타 확률%', '치명타 피해%'
 ];
 
 function getStatName(stat: Stat) {
-    return stat.kind.substring(0, stat.kind.length - 1);
+    if (stat.kind[stat.kind.length - 1] === "+" || stat.kind[stat.kind.length - 1] === "%")
+        return stat.kind.substring(0, stat.kind.length - 1);
+    else
+        return stat.kind;
 }
 
 function getStatValue(stat: Stat) {
     if (stat.kind[stat.kind.length - 1] == "+")
-        return "+" + stat.value.toLocaleString();
+        return "+" + stat.value.toLocaleString('en-US', { maximumFractionDigits: 0 });
     else if (stat.kind[stat.kind.length - 1] == "%")
         return "+" + stat.value.toFixed(1) + "%";
     else
@@ -44,45 +47,49 @@ type OptionSelectorProps = {
 
 function OptionSelector({isMain, kind, stat, updateStat}: OptionSelectorProps) {
     const [isEditing, setIsEditing] = useState(false);
-    const [tempValue, setTempValue] = useState(stat.value);
     const dropdownRef = useRef<HTMLDivElement>(null);
-
-    useEffect(() => {
-        function handleClickOutside(evt: MouseEvent) {
-            if (dropdownRef.current && !dropdownRef.current.contains(evt.target as Node)) {
-                setIsEditing(false);
-                setTempValue(stat.value);
-            }
-        }
-        if (isEditing) {
-            document.addEventListener('mousedown', handleClickOutside);
-        }
-
-        return () => { document.removeEventListener('mousedown', handleClickOutside); };
-    }, [isEditing]);
 
     function handleSelect(newValue: string) {
         updateStat(draft => { draft.kind = newValue; });
-    }
-
-    function handleValueChange(newValue: string) {
-        const num = parseFloat(newValue);
-        if (!isNaN(num)) setTempValue(num);
-    }
-
-    function handleValueBlur() {
-        updateStat(draft => { draft.value = tempValue; });
         setIsEditing(false);
     }
 
+    function isOnlyFloat(str: string) {
+        return /^-?(\d+(\.\d*)?|\.\d+)$/.test(str.trim());
+      }
+
+    function changeStatValue() {
+        setIsEditing(false);
+        if (stat.kind === 'Empty') return;
+        const ret = prompt('수정할 값을 입력해주세요.', stat.value.toString());
+        if (ret === null || !isOnlyFloat(ret)) return;
+        const num = parseFloat(ret);
+        if (isNaN(num) || num < 0) return;
+        updateStat(draft => { draft.value = num; });
+    }
+
+    if (isMain && kind <= 1 && isEditing) setIsEditing(false);
+
+    useEffect(() => {
+        const handleClickOutside = (evt: MouseEvent) => {
+            if (dropdownRef.current && !dropdownRef.current.contains(evt.target as Node))
+                setIsEditing(false);
+        };
+
+        if (isEditing)
+            document.addEventListener('mousedown', handleClickOutside);
+
+        return () => { document.removeEventListener('mousedown', handleClickOutside); }
+    }, [isEditing]);
+
     return (
         <div className="relative" ref={dropdownRef}>
-            <div className={isMain ? 'cursor-pointer inline text-lg font-medium' : 'cursor-pointer flex justify-between'} onDoubleClick={() => setIsEditing(true)}>
-                <span>{getStatName(stat)}</span> <span className="font-bold">{getStatValue(stat)}</span>
+            <div className={isMain ? "cursor-pointer inline-block text-lg font-medium" : "cursor-pointer flex justify-between"} onClick={() => setIsEditing(true)}>
+                <span>{getStatName(stat)}</span><span className="inline-block pl-1 font-bold" onClick={e => { e.stopPropagation(); changeStatValue(); }}>{getStatValue(stat)}</span>
             </div>
             {
                 isEditing && (
-                    <div className="absolute z-10 mt-1 bg-white border rounded-lg shadow text-sm w-40">
+                    <div className="absolute z-10 top-full bg-white border rounded-lg shadow text-sm w-35">
                         {
                             (isMain ? MainOptions[kind] : SubOptions).map(opt => (
                                 <div key={opt} className="px-3 py-1 hover:bg-blue-100 cursor-pointer" onClick={() => handleSelect(opt)}>
@@ -91,8 +98,6 @@ function OptionSelector({isMain, kind, stat, updateStat}: OptionSelectorProps) {
                             ))
                         }
                     </div>
-
-                    // 인풋 추가!!
                 )
             }
         </div>
@@ -107,7 +112,7 @@ type ArtifactViewProps = {
 
 function ArtifactView({kind, artifact, updateArtifact}: ArtifactViewProps) {
     return (
-        <div className="w-72 rounded-xl border bg-white shadow-sm px-4 py-3 space-y-3" title="더블클릭으로 수정">
+        <div className="w-72 rounded-xl border bg-white shadow-sm px-4 py-3 space-y-3" title="클릭하여여 수정">
             <div className="flex justify-between items-end">
                 <OptionSelector isMain={true} kind={kind} stat={artifact.main} updateStat={recipe => updateArtifact(draft => recipe(draft.main))} />
                 <img src={ArtifactIcon[kind]} className="inline-block w-8 h-8" />
@@ -115,7 +120,7 @@ function ArtifactView({kind, artifact, updateArtifact}: ArtifactViewProps) {
             <div className="space-y-1 text-sm">
                 {
                     artifact.sub.map((elem, idx) => (
-                        <OptionSelector isMain={false} kind={kind} stat={elem} updateStat={recipe => updateArtifact(draft => recipe(draft.sub[idx]))}/>
+                        <OptionSelector key={idx} isMain={false} kind={kind} stat={elem} updateStat={recipe => updateArtifact(draft => recipe(draft.sub[idx]))}/>
                     ))
                 }
             </div>

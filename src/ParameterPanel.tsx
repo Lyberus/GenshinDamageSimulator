@@ -1,5 +1,5 @@
 import { Draft } from "immer";
-import { Artifact, Character, Spec } from "./App";
+import { Character, Spec } from "./App";
 import palette from "./assets/ElementalPalette";
 import ArtifactView from "./ArtifactView";
 import "./Parameter.css";
@@ -23,7 +23,7 @@ function makeSpec(name: string): Spec {
         burstLevel: 9,
         artifact: [
             {
-                main: { kind: "체력+", value: 4780 },
+                main: { kind: "HP+", value: 4780 },
                 sub: [
                     { kind: "공격력%", value: 4.6 },
                     { kind: "원소 충전 효율%", value: 5.7 },
@@ -94,7 +94,7 @@ function ParameterPanel({ characters, selected, updatePreset, updateCharacter }:
     }
 
     return (
-        <div className="bg-gray-100 w-140 p-3">
+        <div className="bg-gray-100 w-150 p-3">
             <div className={`w-full h-full flex flex-col ${selectedPalette.font}`}>
                 <div className="flex h-fit">
                     {
@@ -174,7 +174,7 @@ function ParameterPanel({ characters, selected, updatePreset, updateCharacter }:
                                     <div className="space-y-2">
                                         {
                                             currentPreset.artifact.map((elem, idx) => (
-                                                <ArtifactView kind={idx} artifact={elem} updateArtifact={recipe => updatePreset(draft => recipe(draft.artifact[idx]))} />
+                                                <ArtifactView key={idx} kind={idx} artifact={elem} updateArtifact={recipe => updatePreset(draft => recipe(draft.artifact[idx]))} />
                                             ))
                                         }
                                     </div>
